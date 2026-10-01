@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         shard: [1, 2]
@@ -20,7 +20,7 @@ jobs:
           path: reports/test-results.xml
   merge:
     needs: test
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
