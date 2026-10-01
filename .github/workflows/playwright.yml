@@ -17,7 +17,12 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
       - uses: actions/checkout@v4
-      -  run: npm test --shard=${{matrix.shard}}
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Run Playwright tests
+        run: npm test --shard=${{matrix.shard}}
       - uses: actions/upload-artifact@v4
         with:
           name: test-results-${{matrix.shard}}
