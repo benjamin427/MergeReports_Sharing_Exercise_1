@@ -6,7 +6,7 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         shard: [1, 2, 3, 4, 5]
@@ -21,7 +21,7 @@ jobs:
 
   merge-reports:
     needs: test
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Download All Artifacts
