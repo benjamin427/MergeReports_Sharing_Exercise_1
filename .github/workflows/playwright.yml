@@ -4,32 +4,27 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu
     strategy:
       matrix:
-        shard: [1, 2, 3, 4, 5]
-    steps:
-    - uses: actions/checkout@v4
-    - run: npm test -- --shard=${{matrix.shard}}
-    - name: Upload Report Fragment
-      uses: actions/upload-artifact@v4
-      with:
-        name: report-shard-${{matrix.shard}}
-        path: reports/test-results.xml
-
-  merge-reports:
-    needs: test
-    runs-on: ubuntu-latest
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@v4
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v4
+      - run: npm test -- --shard=${{matrix.shard}}/2
+      - uses: actions/upload-artifact@v4
         with:
-          path: alll-reports
-      - name: Merge Reports
-        run: |
-          node scrips/merge-reports.js all-reports/
-
-
+          name: test-results-${{matrix.shard}}
+          path: reports/test-results.xml
+  merge:
+    needs: test
+    runs-on: ubuntu
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: all-reports
+      - name: Merge and Process Reports
+        run: | 
+          node scripts/merge-reports.js
